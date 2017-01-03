@@ -204,6 +204,17 @@ public class ConcurrentHttpRequestsSampler extends HTTPSamplerBase implements In
 
         failureNum++;
       }
+      
+      try
+      {
+        jmeterContextOfParentThread.getVariables().put(subResult.getSampleLabel()+"_responseBody",new String(subResult.getResponseData(),"UTF-8"));
+      }
+      catch(java.io.UnsupportedEncodingException e)
+      {
+        jmeterContextOfParentThread.getVariables().put(subResult.getSampleLabel()+"_responseBody","Unable to read response data");
+      }
+      
+      
     }
     int resultOption = this.getPropertyAsInt( Constants.RESULT_OPTION, Constants.ResultOption.ALLPASS.getOptionValue() );
     if ( ( resultOption == Constants.ResultOption.ALLPASS.getOptionValue() && failureNum > 0 )
